@@ -1,0 +1,53 @@
+package be.technifutur.sudoku.utility;
+
+import be.technifutur.sudoku.Model;
+
+public abstract class AbstractSudokuModel5 implements Model{
+
+    private Cellule[][] grille;
+
+    /**
+     * Constructeur
+     */
+    protected AbstractSudokuModel(Cellule[][] grille){
+        this.grille = grille;
+        for (int line = 0; line < grille.length; line++) {
+            for (int column = 0; column < grille[line].length; column++) {
+                grille[line][column] = getEmpty();
+            }
+        }
+    }
+
+    public static Cellule getEmpty(){
+        return EMPTY;
+    }
+
+    @Override
+    public void addValue(char value, int line, int column) throws SudokuValueException, SudokuPositionException {
+        if(!isValueValid(value)) {
+            throw new SudokuValueException(String.format(
+                    "la valeur (%s) n'est pas valide",
+                    value));
+        }
+        if (!isPositionValid(line, column)) {
+            throw new SudokuPositionException(String.format(
+                    "la position (%s, %s) n'est pas valide",
+                    line,
+                    column)
+            );
+        }
+        grille[line][column] = value;
+        }
+    }
+
+    @Override
+    public char getValue(int line, int column) throws SudokuPositionException {
+        if (!isPositionValid(line, column))
+            throw new SudokuPositionException(String.format(
+                    "la position (%s, %s) n'est pas valide",
+                    line,
+                    column)
+            );
+        return grille[line][column];
+    }
+}
